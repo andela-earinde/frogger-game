@@ -23,7 +23,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        score1 = 5;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -82,6 +83,7 @@ var Engine = (function(global) {
         checkEndPoint();
         updateEntities(dt);
         checkCollisions();
+        checkPlayerEndPoint();
     }
 
     function checkCollisions() {
@@ -90,8 +92,17 @@ var Engine = (function(global) {
                 (player.y+150 >= enemy.y) && (player.y+150 <= enemy.y + 171)) {
                   player.x = 100;
                   player.y = 400;
+                  score1 -= 1;
             }
         });
+    }
+
+    //draw score board and update it 
+    function score() {
+        ctx.drawImage(Resources.get('images/Heart.png'), canvas.width-200, 50, 40, 40);
+        ctx.font = "30px serif";
+        ctx.fillStyle = "whitesmoke";
+        ctx.fillText(score1, canvas.width-150, 80);   
     }
 
     /* This is called by the update function  and loops through all of the
@@ -107,13 +118,31 @@ var Engine = (function(global) {
         });
         player.update();
     }
-
+    
+    //check if bugs have reached the end point
     function checkEndPoint() {
         allEnemies.forEach(function(enemy){
             if(enemy.x >= canvas.width) {
-                enemy.x = 20 * Math.random();
+                enemy.x = 10 * Math.random();
             }
         });
+    }
+    
+    //check if player is at the edges
+    function checkPlayerEndPoint() {
+        if(player.x <= 0) {
+            player.x = canvas.width - 100;
+        }
+        else if(player.x >= canvas.width) {
+            player.x = 10;
+        }
+        else if(player.y <= 0) {
+            score1 += 1;
+            player.y = canvas.height - 200;
+        }
+        else if(player.y >= canvas.height - 200) {
+            player.y = canvas.height - 200;
+        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -172,6 +201,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+
+        score();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -191,7 +222,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
