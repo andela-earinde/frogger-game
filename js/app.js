@@ -29,7 +29,7 @@ Enemy.prototype.render = function() {
 var Player = function(x , y) {
     this.x = x;
     this.y= y;
-    this.sprite = 'images/char-boy.png';
+    this.sprite; 
 }
 
 Player.prototype.update = function(dt) {
@@ -93,7 +93,6 @@ document.addEventListener('keydown', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-
 });
 
 

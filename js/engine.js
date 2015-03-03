@@ -27,7 +27,8 @@ var Engine = (function(global) {
         score1 = 5,
         move = document.getElementById("move"),
         hit = document.getElementById("hit"),
-        sound = document.getElementById("sound");
+        sound = document.getElementById("sound")
+        var chr = 0;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -51,6 +52,7 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
+        renderEntities();
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -71,8 +73,13 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
-        sound.play();
+        //sound.play();
     }
+
+    //add event listener to replay the song when it finishes
+    sound.addEventListener("ended", function(){
+         sound.play();
+    })
 
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
@@ -119,7 +126,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
-            dt += 0.012
+            dt += 0.017;
             enemy.update(dt);
         });
         player.update();
@@ -189,9 +196,6 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
-
-        renderEntities();
     }
 
     /* This function is called by the render function and is called on each game
@@ -215,6 +219,52 @@ var Engine = (function(global) {
         score();
     }
 
+    //function to render the characters 
+    function renderChar() {        
+        character = ['images/char-boy.png', 
+                     'images/char-cat-girl.png',
+                     'images/char-horn-girl.png',
+                     'images/char-pink-girl.png',
+                     'images/char-princess-girl.png'];
+        
+        ctx.drawImage(Resources.get('images/Selector.png'), 200, 300);  
+        ctx.drawImage(Resources.get(character[chr]), 200, 300);        
+    }
+
+    //handle key events to change the player
+    win.addEventListener('keydown', function(event){
+         if(event.keyCode === 39) {
+              chr >= 4 ? chr = 4 : chr += 1;
+         }
+         else if(event.keyCode === 37) {
+              chr <= 0 ? chr = 0 : chr -= 1; 
+         }
+         else if(event.keyCode === 32) {
+              switch(chr) {
+                  case 0:
+                      player.sprite = character[0];
+                      init();
+                      break;
+                  case 1:
+                      player.sprite = character[1];
+                      init();
+                      break;
+                  case 2:
+                      player.sprite = character[2];
+                      init();
+                      break;
+                  case 3:
+                      player.sprite = character[3];
+                      init();
+                      break;
+                  case 4:
+                      player.sprite = character[4];
+                      init();
+                      break;
+              }
+         }
+    });
+
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
@@ -222,6 +272,14 @@ var Engine = (function(global) {
     function reset() {
         // noop
     }
+
+    //function to start the game
+    function startGame() {
+        render();
+        renderChar();
+
+        st = win.requestAnimationFrame(startGame);
+    } 
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
@@ -233,10 +291,15 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
         'images/Heart.png',
-        'images/Star.png'
+        'images/Star.png',
+        'images/Selector.png'
     ]);
-    Resources.onReady(init);
+    Resources.onReady(startGame);
 
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developer's can use it more easily
