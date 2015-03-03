@@ -15,7 +15,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x *= dt+1.04;
+    this.x += (125 * dt);
 }
 
 // Draw the enemy on the screen, required method for game
@@ -41,17 +41,32 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(input) {
      if(input === "up") {
+          move.play();
           player.y -= 100;
      }
      else if(input === "down") {
+          move.play();
           player.y += 100;
      }
      else if(input === "right") {
+          move.play();
           player.x += 100;
      }
      else if(input == "left") {
+          move.play();
           player.x -= 100;
      }
+}
+
+//function to render stars and gems
+var Star = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Star.png';
+}
+
+Star.prototype.render = function() {
+     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 // Now instantiate your objects.
@@ -59,11 +74,13 @@ Player.prototype.handleInput = function(input) {
 // Place the player object in a variable called player
 var player = new Player(100, 400);
 
-var allEnemies = [new Enemy(10 * Math.random()+1, 50),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-                  new Enemy(10 * Math.random()+1, 130),
-                  new Enemy(10 * Math.random()+1, 220),
-                  ];
+var allEnemies = [new Enemy(-10 * Math.random(), 50),
+                  new Enemy(-10 * Math.random(), 130),
+                  new Enemy(-10 * Math.random(), 220)];
 
+var allStars = [new Star(400, 50),
+                new Star(300, 130),
+                new Star(200, 130)];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

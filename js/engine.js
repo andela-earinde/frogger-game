@@ -24,7 +24,10 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime,
-        score1 = 5;
+        score1 = 5,
+        move = document.getElementById("move"),
+        hit = document.getElementById("hit"),
+        sound = document.getElementById("sound");
 
     canvas.width = 505;
     canvas.height = 606;
@@ -68,6 +71,7 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
+        sound.play();
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -90,6 +94,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy){
             if((player.x+50 >= enemy.x) && (player.x+50 <= enemy.x + 101) &&
                 (player.y+150 >= enemy.y) && (player.y+150 <= enemy.y + 171)) {
+                  hit.play();
                   player.x = 100;
                   player.y = 400;
                   score1 -= 1;
@@ -114,6 +119,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
+            dt += 0.012
             enemy.update(dt);
         });
         player.update();
@@ -123,7 +129,7 @@ var Engine = (function(global) {
     function checkEndPoint() {
         allEnemies.forEach(function(enemy){
             if(enemy.x >= canvas.width) {
-                enemy.x = 10 * Math.random();
+                enemy.x = -10 * Math.random();
             }
         });
     }
@@ -200,6 +206,10 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        allStars.forEach(function(star){
+            star.render();
+        });
+
         player.render();
 
         score();
@@ -223,7 +233,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/Heart.png'
+        'images/Heart.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 
