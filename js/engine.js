@@ -131,7 +131,7 @@ var Engine = (function(global) {
         if(score1 === 0) {
             render();
             ctx.font = "30px serif";
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "red";
             if(score2 < 6){
                  ctx.fillText("Game Over! you picked "+score2+" star(s)",
                      canvas.width-450, canvas.height/2);
@@ -140,6 +140,7 @@ var Engine = (function(global) {
                  ctx.fillText("Game Over! you picked "+score2+"star(s)", 
                     canvas.width-450, canvas.height/2); 
             }
+            sound.pause();
             cancelAnimationFrame(ini);
         }
     }
@@ -323,6 +324,18 @@ var Engine = (function(global) {
     function startGame() {
         render();
         renderChar();
+
+        ctx.font = "50px serif";
+        ctx.fillStyle = "red";
+        ctx.fillText("Frogger Game", canvas.width-400, canvas.height/2-100);
+
+        ctx.font = "20px serif";
+        ctx.fillStyle = "red";
+        ctx.fillText("Use the left and right key to change the player", canvas.width-400, canvas.height/2-50);
+
+        ctx.font = "20px serif";
+        ctx.fillStyle = "red";
+        ctx.fillText("Still Buggy!", canvas.width-400, canvas.height/2-10);
 
         st = win.requestAnimationFrame(startGame);
     } 
