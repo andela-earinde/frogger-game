@@ -100,6 +100,8 @@ var Engine = (function(global) {
         checkCollisions();
         checkPlayerEndPoint();
         starCollison();
+        rockCollision();
+        gemCollision();
     }
 
     function checkCollisions() {
@@ -126,6 +128,31 @@ var Engine = (function(global) {
         }
     }
 
+    //check for rock collison
+    function rockCollision() {
+        allRocks.forEach(function(rock){
+             if((player.x+50 >= rock.x) && (player.x+50 <= rock.x + 101) &&
+                (player.y+150 >= rock.y) && (player.y+150 <= rock.y + 171)) {
+                  hit.play();
+                  player.x = 100;
+                  player.y = 400;
+                  score1 -= 1;
+            }    
+        });
+    }
+
+    //check for star collision
+    function gemCollision() {
+        allGems.forEach(function(gem){
+             if((player.x+50 >= gem.x) && (player.x+50 <= gem.x + 101) &&
+                (player.y+150 >= gem.y) && (player.y+150 <= gem.y + 171)) {
+                  gem.x = -100;
+                  gem.y = -100;
+                  score1 += 4;
+            }    
+        });         
+    }
+
     //function to end the game
     function endGame() {
         if(score1 === 0) {
@@ -134,12 +161,17 @@ var Engine = (function(global) {
             ctx.fillStyle = "red";
             if(score2 < 6){
                  ctx.fillText("Game Over! you picked "+score2+" star(s)",
-                     canvas.width-450, canvas.height/2);
+                 canvas.width-450, canvas.height/2+50);
             }
-            else if(score2 === 6){
-                 ctx.fillText("Game Over! you picked "+score2+"star(s)", 
-                    canvas.width-450, canvas.height/2); 
-            }
+            sound.pause();
+            cancelAnimationFrame(ini);
+        }
+        else if(score2 === 6){
+            render();
+            ctx.font = "30px serif";
+            ctx.fillStyle = "red";
+            ctx.fillText("Game Over! you picked "+score2+" star(s)", 
+            canvas.width-450, canvas.height/2+50); 
             sound.pause();
             cancelAnimationFrame(ini);
         }
@@ -256,6 +288,14 @@ var Engine = (function(global) {
             star.render();
         });
 
+        allRocks.forEach(function(rock){
+            rock.render();
+        });
+
+        allGems.forEach(function(gem){
+            gem.render();
+        });
+
         player.render();
 
         score();
@@ -268,9 +308,19 @@ var Engine = (function(global) {
                      'images/char-horn-girl.png',
                      'images/char-pink-girl.png',
                      'images/char-princess-girl.png'];
+
+        names = ['eniola',
+                 'ope',
+                 'dayo',
+                 'mimi',
+                 'john'];
         
         ctx.drawImage(Resources.get('images/Selector.png'), 200, 300);  
-        ctx.drawImage(Resources.get(character[chr]), 200, 300);        
+        ctx.drawImage(Resources.get(character[chr]), 200, 300); 
+
+        ctx.font = "30px serif";
+        ctx.fillStyle = "purple";
+        ctx.fillText(">"+names[chr]+"<", canvas.width/2-50, canvas.height/2+200);       
     }
 
     //handle key events to change the player
@@ -335,7 +385,7 @@ var Engine = (function(global) {
 
         ctx.font = "20px serif";
         ctx.fillStyle = "red";
-        ctx.fillText("Still Buggy!", canvas.width-400, canvas.height/2-10);
+        ctx.fillText("Still Buggy! Press space to start", canvas.width-400, canvas.height/2-10);
 
         st = win.requestAnimationFrame(startGame);
     } 
@@ -356,7 +406,9 @@ var Engine = (function(global) {
         'images/char-princess-girl.png',
         'images/Heart.png',
         'images/Star.png',
-        'images/Selector.png'
+        'images/Selector.png',
+        'images/Rock.png',
+        'images/gem-blue.png'
     ]);
     Resources.onReady(startGame);
 

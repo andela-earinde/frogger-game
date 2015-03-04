@@ -69,6 +69,26 @@ Star.prototype.render = function() {
      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+var Rock = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Rock.png';
+}
+
+Rock.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+var Gem = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/gem-blue.png';
+}
+
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -82,8 +102,14 @@ var allStars = [new Star(400, 50),
                 new Star(300, 130),
                 new Star(200, 130),
                 new Star(225, 300),
-                new Star(100, 100),
+                new Star(100, 70),
                 new Star(100, 225)];
+
+var allRocks = [new Rock(100, 125),
+                new Rock(400, 300)];
+
+var allGems = [new Gem(410, 130),
+               new Gem(210, 40)];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
