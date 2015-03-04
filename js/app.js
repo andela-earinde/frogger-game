@@ -80,7 +80,10 @@ var allEnemies = [new Enemy(-10 * Math.random(), 50),
 
 var allStars = [new Star(400, 50),
                 new Star(300, 130),
-                new Star(200, 130)];
+                new Star(200, 130),
+                new Star(225, 300),
+                new Star(100, 100),
+                new Star(100, 225)];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

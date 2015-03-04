@@ -25,6 +25,8 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime,
         score1 = 5,
+        score2 = 0,
+        ini,
         move = document.getElementById("move"),
         hit = document.getElementById("hit"),
         sound = document.getElementById("sound")
@@ -62,7 +64,9 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        ini = win.requestAnimationFrame(main);
+
+         endGame();
     };
 
     /* This function does some initial setup that should only occur once,
@@ -73,7 +77,7 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
-        //sound.play();
+        sound.play();
     }
 
     //add event listener to replay the song when it finishes
@@ -90,11 +94,12 @@ var Engine = (function(global) {
      * functionality this way (you could just implement collision detection
      * on the entities themselves within your app.js file).
      */
-    function update(dt) {
+    function update(dt) { 
         checkEndPoint();
         updateEntities(dt);
         checkCollisions();
         checkPlayerEndPoint();
+        starCollison();
     }
 
     function checkCollisions() {
@@ -109,12 +114,48 @@ var Engine = (function(global) {
         });
     }
 
+    //check for star collision 
+    function starCollison() {
+        for(var i = 0; i < allStars.length; i++){
+             if((player.x+50 >= allStars[i].x) && (player.x+50 <= allStars[i].x + 101) &&
+                (player.y+150 >= allStars[i].y) && (player.y+150 <= allStars[i].y + 171)) {
+                   allStars[i].x = -100;
+                   allStars[i].y = -100;
+                   score2 += 1;
+            }    
+        }
+    }
+
+    //function to end the game
+    function endGame() {
+        if(score1 === 0) {
+            render();
+            ctx.font = "30px serif";
+            ctx.fillStyle = "blue";
+            if(score2 < 6){
+                 ctx.fillText("Game Over! you picked "+score2+" star(s)",
+                     canvas.width-450, canvas.height/2);
+            }
+            else if(score2 === 6){
+                 ctx.fillText("Game Over! you picked "+score2+"star(s)", 
+                    canvas.width-450, canvas.height/2); 
+            }
+            cancelAnimationFrame(ini);
+        }
+    }
+
     //draw score board and update it 
     function score() {
         ctx.drawImage(Resources.get('images/Heart.png'), canvas.width-200, 50, 40, 40);
         ctx.font = "30px serif";
         ctx.fillStyle = "whitesmoke";
-        ctx.fillText(score1, canvas.width-150, 80);   
+        ctx.fillText(score1, canvas.width-150, 80); 
+
+        //star score
+        ctx.drawImage(Resources.get('images/Star.png'), canvas.width-100, 45, 45, 45);
+        ctx.font = "30px serif";
+        ctx.fillStyle = "whitesmoke";
+        ctx.fillText(score2, canvas.width-50, 80); 
     }
 
     /* This is called by the update function  and loops through all of the
@@ -126,7 +167,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
-            dt += 0.017;
+            dt += 0.010;
             enemy.update(dt);
         });
         player.update();
@@ -244,22 +285,27 @@ var Engine = (function(global) {
                   case 0:
                       player.sprite = character[0];
                       init();
+                      cancelAnimationFrame(st);
                       break;
                   case 1:
                       player.sprite = character[1];
                       init();
+                      cancelAnimationFrame(st);
                       break;
                   case 2:
                       player.sprite = character[2];
                       init();
+                      cancelAnimationFrame(st);
                       break;
                   case 3:
                       player.sprite = character[3];
                       init();
+                      cancelAnimationFrame(st);
                       break;
                   case 4:
                       player.sprite = character[4];
                       init();
+                      cancelAnimationFrame(st);
                       break;
               }
          }
