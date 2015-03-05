@@ -29,7 +29,9 @@ var Engine = (function(global) {
         ini,
         move = document.getElementById("move"),
         hit = document.getElementById("hit"),
-        sound = document.getElementById("sound")
+        sound = document.getElementById("sound"),
+        star = document.getElementById("star"),
+        end = document.getElementById("end");
         var chr = 0;
 
     canvas.width = 505;
@@ -121,6 +123,7 @@ var Engine = (function(global) {
         for(var i = 0; i < allStars.length; i++){
              if((player.x+50 >= allStars[i].x) && (player.x+50 <= allStars[i].x + 101) &&
                 (player.y+150 >= allStars[i].y) && (player.y+150 <= allStars[i].y + 171)) {
+                   star.play();
                    allStars[i].x = -100;
                    allStars[i].y = -100;
                    score2 += 1;
@@ -136,7 +139,6 @@ var Engine = (function(global) {
                   hit.play();
                   player.x = 100;
                   player.y = 400;
-                  score1 -= 1;
             }    
         });
     }
@@ -146,6 +148,7 @@ var Engine = (function(global) {
         allGems.forEach(function(gem){
              if((player.x+50 >= gem.x) && (player.x+50 <= gem.x + 101) &&
                 (player.y+150 >= gem.y) && (player.y+150 <= gem.y + 171)) {
+                  star.play();
                   gem.x = -100;
                   gem.y = -100;
                   score1 += 4;
@@ -163,6 +166,7 @@ var Engine = (function(global) {
                  ctx.fillText("Game Over! you picked "+score2+" star(s)",
                  canvas.width-450, canvas.height/2+50);
             }
+            end.play();
             sound.pause();
             cancelAnimationFrame(ini);
         }
@@ -171,7 +175,8 @@ var Engine = (function(global) {
             ctx.font = "30px serif";
             ctx.fillStyle = "red";
             ctx.fillText("Game Over! you picked "+score2+" star(s)", 
-            canvas.width-450, canvas.height/2+50); 
+            canvas.width-450, canvas.height/2+50);
+            end.play(); 
             sound.pause();
             cancelAnimationFrame(ini);
         }
