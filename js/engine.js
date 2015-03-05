@@ -309,11 +309,11 @@ var Engine = (function(global) {
                      'images/char-pink-girl.png',
                      'images/char-princess-girl.png'];
 
-        names = ['eniola',
-                 'ope',
-                 'dayo',
-                 'mimi',
-                 'john'];
+        names = ['Mayor',
+                 'Olaide',
+                 'Yetti',
+                 'Kosy',
+                 'Kemi'];
         
         ctx.drawImage(Resources.get('images/Selector.png'), 200, 300);  
         ctx.drawImage(Resources.get(character[chr]), 200, 300); 
